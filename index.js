@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 app.get('/getApiResponse', (req, res) => {
-  res.send(readFile()) ;
+  res.send(readFile());
 });
 
 app.listen(port, () => {

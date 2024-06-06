@@ -5,6 +5,7 @@ export const createData = function (req, res) {
 import fs from 'fs';
 import csv from 'csv-parser';
 import axios from 'axios';
+import { json } from 'express';
 
 // Define weights for each parameter  
 const weights = {
@@ -32,17 +33,17 @@ export const readFile = () => {
             return;
         }
         const jsonData = JSON.parse(data);
-        
-        // determineMostSuccessfulVideoFromMultipleVideos(jsonData);
-        jsonData.slice(0,3).forEach((row) => {
-            getReponseFromOpenAI(jsonData[0]).then((response) => {
-                output.push(response.data.choices[0].message.content);
-                console.log({output});
-            }).catch((error) => {
-                console.log(error);
-            });
+
+        const promises = jsonData.slice(0,4).map((row) => {
+            return getReponseFromOpenAI(row);
         })
-    // determineMostSuccessfulVideoFromMultipleVideos(output);
+
+        Promise.all(promises).then((responses) => {
+            determineMostSuccessfulVideoFromMultipleVideos(JSON.stringify(responses));
+        }).catch((error) => {  
+            console.log(error.request.data);
+        });
+
     });
 }
 
@@ -74,7 +75,12 @@ const getReponseFromOpenAI = (inputJsonArray) => {
 
     const output = []
 
-    return callOpenAiApi(apiUrl, requestBody, headers);
+    return callOpenAiApi(apiUrl, requestBody, headers).then((response) => {
+        console.log(response.data.choices[0].message.content);
+        return response.data.choices[0].message.content;
+    }).catch((error) => {    
+        console.log(error);
+    })
 };
 
 const determineMostSuccessfulVideoFromMultipleVideos = (inputJsonArray) => {
