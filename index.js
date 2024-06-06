@@ -1,5 +1,5 @@
 import express from "express";
-import { readFile } from "./controller.js";
+import { getStatsForAllVideos, getMostSuccessFulVideo } from "./controller.js";
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
@@ -18,10 +18,10 @@ app.post("/getSuccessParamForAllVideos", jsonParser, async (req, res, next) => {
   res.send(response);
  });
 
- app.post("/getMostSuccessfulVideo", jsonParser, async (req, res, next) => {
-  const response = await getMostSuccessFulVideo(req.body);
-  res.send(response);
- });
+app.post("/getMostSuccessfulVideo", jsonParser, async (req, res, next) => {
+const response = await getMostSuccessFulVideo(req.body);
+res.send(response);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
