@@ -13,10 +13,11 @@ const output = [];
 
 export const readFile = async (data) => {
     const jsonData = data;
-
-    const promises = jsonData.map((row) => {
-        return getReponseFromOpenAI(row);
-    })
+    
+    // const promises = jsonData.map((row) => {
+    //     return getReponseFromOpenAI(row);
+    // })
+    const promises = [getReponseFromOpenAI(jsonData)];
     return promiseExecution(promises);
 }
 
@@ -53,10 +54,9 @@ const getReponseFromOpenAI = (inputJsonArray) => {
     const output = []
 
     return callOpenAiApi(apiUrl, requestBody, headers).then((response) => {
-        // console.log(response.data.choices[0].message.content);
         return response.data.choices[0].message.content;
     }).catch((error) => {
-        console.log(error);
+        console.log(error.request.data);
     })
 };
 
@@ -119,7 +119,9 @@ const input = [
                     I will provide input in the form of JSON.
                     Use this info to determine the success rate of the video.
                     Determine if the video is successful or not. Dont give me details, just tell me if the video is successful or not.
-                    Add the success parameter and reason in detail in the json. Do not add any instructions in the json or message.`
+                    Return me the video which has the highest chances of being successful.
+                    Also specify the reason for the same.
+                    Do not add any instructions in the json or message.`
     }
 ]
 
