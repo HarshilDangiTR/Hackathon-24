@@ -13,8 +13,13 @@ app.get('/test', (req, res) => {
   res.send("hiii");
 });
 
-app.post("/getVideoAnalysis", jsonParser, async (req, res, next) => {
-  const response = await readFile(req.body);
+app.post("/getSuccessParamForAllVideos", jsonParser, async (req, res, next) => {
+  const response = await getStatsForAllVideos(req.body);
+  res.send(response);
+ });
+
+ app.post("/getMostSuccessfulVideo", jsonParser, async (req, res, next) => {
+  const response = await getMostSuccessFulVideo(req.body);
   res.send(response);
  });
 
