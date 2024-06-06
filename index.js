@@ -1,16 +1,21 @@
 import express from "express";
-import { createData, readFile } from "./controller.js";
+import { readFile } from "./controller.js";
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = 3000;
 
-app.get('/getApiResponse', (req, res) => {
-  res.send(readFile());
+app.use(cors()); 
+var jsonParser = bodyParser.json() 
+
+app.get('/test', (req, res) => {
+  res.send("hiii");
 });
 
-app.post("/getVideoAnalysis", (req, res, next) => {
-  const message = req.body.message;
-  res.json(readFile(req.body));
+app.post("/getVideoAnalysis", jsonParser, async (req, res, next) => {
+  const response = await readFile(req.body);
+  res.send(response);
  });
 
 app.listen(port, () => {

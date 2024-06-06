@@ -2,10 +2,7 @@ export const createData = function (req, res) {
     console.log("createData");
 }
 
-import fs from 'fs';
-import csv from 'csv-parser';
 import axios from 'axios';
-import { json } from 'express';
 
 const apiKey = 'ba3d893b16314ec1ac85abaea9ea9df0'; // Replace with your OpenAI API key
 const apiUrl = 'https://a208321-datavizaipocbfv5-zyzj.openai.azure.com/openai/deployments/DatavizAIPOCbFV5-gpt-35-turbo/chat/completions?api-version=2023-07-01-preview'
@@ -14,18 +11,17 @@ const apiUrl = 'https://a208321-datavizaipocbfv5-zyzj.openai.azure.com/openai/de
 const data = [];
 const output = [];
 
-export const readFile = (data) => {
-    const jsonData = JSON.parse(data);
+export const readFile = async (data) => {
+    const jsonData = data;
 
-    const promises = jsonData.slice(0, 4).map((row) => {
+    const promises = jsonData.map((row) => {
         return getReponseFromOpenAI(row);
     })
+    return promiseExecution(promises);
+}
 
-    Promise.all(promises).then((responses) => {
-        determineMostSuccessfulVideoFromMultipleVideos(JSON.stringify(responses));
-    }).catch((error) => {
-        console.log(error.request.data);
-    });
+const promiseExecution = async (promises) => {
+    return await Promise.all(promises);
 }
 
 const getReponseFromOpenAI = (inputJsonArray) => {
@@ -57,7 +53,7 @@ const getReponseFromOpenAI = (inputJsonArray) => {
     const output = []
 
     return callOpenAiApi(apiUrl, requestBody, headers).then((response) => {
-        console.log(response.data.choices[0].message.content);
+        // console.log(response.data.choices[0].message.content);
         return response.data.choices[0].message.content;
     }).catch((error) => {
         console.log(error);
@@ -89,7 +85,7 @@ const determineMostSuccessfulVideoFromMultipleVideos = (inputJsonArray) => {
     };
 
     callOpenAiApi(apiUrl, requestBody2, headers).then((response) => {
-        console.log(response.data.choices[0].message.content);
+        return response.data.choices[0].message.content;
     }).catch((error) => {
         console.log(error);
     });
