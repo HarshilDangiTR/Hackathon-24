@@ -4,8 +4,8 @@ import { createData, readFile } from "./controller.js";
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Welcome to my server!');
+app.get('/getApiResponse', (req, res) => {
+  res.send(readFile()) ;
 });
 
 app.listen(port, () => {
