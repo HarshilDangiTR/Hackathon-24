@@ -8,7 +8,11 @@ app.get('/getApiResponse', (req, res) => {
   res.send(readFile());
 });
 
+app.post("/getVideoAnalysis", (req, res, next) => {
+  const message = req.body.message;
+  res.json(readFile(req.body));
+ });
+
 app.listen(port, () => {
-    readFile();
   console.log(`Server is running on port ${port}`);
 });
