@@ -142,7 +142,7 @@ const input = [
                     I will provide input in the form of JSON.
                     Use this info to determine the success rate of the video.
                     Determine if the video is successful or not. Dont give me details, just tell me if the video is successful or not.
-                    Add the success parameter and reason in detail in the json.`
+                    Add the success parameter and reason in detail in the json. Do not add any instructions in the json or message.`
     }
 ]
 
